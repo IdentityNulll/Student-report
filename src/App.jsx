@@ -4,7 +4,6 @@ import Dashboard from "./pages/Dashboard";
 import TeacherLayout from "./layouts/TeacherLayout";
 import StudentLayout from "./layouts/StudentLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import axios from "axios";
 
 function App() {
   return (
