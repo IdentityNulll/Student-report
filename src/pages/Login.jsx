@@ -70,9 +70,9 @@ export default function Login() {
         localStorage.setItem("expiredTime", expiredTime);
 
         /* Role based redirect */
-        if (role === "teacher") {
+        if (role === "TEACHER") {
           navigate("/teacher/dashboard");
-        } else if (role === "student") {
+        } else if (role === "STUDENT") {
           navigate("/student/dashboard");
         } else {
           alert("Something went wrong")
