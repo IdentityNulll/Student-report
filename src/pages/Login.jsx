@@ -21,7 +21,6 @@ export default function Login() {
     emailRef.current?.focus();
   }, []);
 
-  /* Check if already logged in */
   useEffect(() => {
     const token = localStorage.getItem("token");
     const expiredTime = localStorage.getItem("expiredTime");
@@ -34,9 +33,9 @@ export default function Login() {
       return;
     }
 
-    if (role === "teacher") {
+    if (role === "TEACHER") {
       navigate("/teacher/dashboard");
-    } else if (role === "student") {
+    } else if (role === "STUDENT") {
       navigate("/student/dashboard");
     }
   }, [navigate]);
@@ -64,7 +63,7 @@ export default function Login() {
             token,
             id: currentUserId,
             role,
-          })
+          }),
         );
 
         localStorage.setItem("expiredTime", expiredTime);
@@ -75,25 +74,21 @@ export default function Login() {
         } else if (role === "STUDENT") {
           navigate("/student/dashboard");
         } else {
-          alert("Something went wrong")
+          alert("Something went wrong");
         }
-
       } catch (err) {
-        setError(
-          err?.response?.data?.message || "Invalid email or password"
-        );
+        setError(err?.response?.data?.message || "Invalid email or password");
         setPassword("");
       } finally {
         setLoading(false);
       }
     },
-    [mail, password, dispatch, navigate, loading]
+    [mail, password, dispatch, navigate, loading],
   );
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black-950 px-4">
       <div className="w-full max-w-md bg-[var(--bg-card)] rounded-2xl shadow-xl px-8 py-20 sm:p-20">
-
         <h1 className="text-4xl text-[var(--text-main)] font-bold mb-8 text-center">
           Welcome Back
         </h1>
@@ -108,7 +103,6 @@ export default function Login() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-
           <div>
             <label
               htmlFor="email"
@@ -167,13 +161,11 @@ export default function Login() {
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
-
         </form>
 
         <p className="text-paper-50 text-center mt-6 text-sm select-none">
           © 2026 CactusCRM. All rights reserved.
         </p>
-
       </div>
     </div>
   );
