@@ -12,6 +12,7 @@ import StudentLayout from "./layouts/StudentLayout";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Notfound from "./routes/Notfound";
+import StudentDashboard from "./pages/StudentDashboard";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<StudentDashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="schedule" element={<Schedule />} />
         <Route path="notifications" element={<Notifications />} />
