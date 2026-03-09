@@ -13,12 +13,13 @@ import StudentLayout from "./layouts/StudentLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Notfound from "./routes/Notfound";
 import StudentDashboard from "./pages/StudentDashboard";
+import Attendance from "./pages/Attendance";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="*" element={<Notfound/>}/>
+      <Route path="*" element={<Notfound />} />
 
       {/* TEACHER ROUTES */}
       <Route
@@ -30,10 +31,10 @@ function App() {
         }
       >
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="profile" element={<Profile />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="schedule" element={<Schedule />} />
         <Route path="notifications" element={<Notifications />} />
+        <Route path="profile/:id" element={<Profile />} />
       </Route>
 
       {/* STUDENT ROUTES */}
@@ -46,9 +47,10 @@ function App() {
         }
       >
         <Route path="dashboard" element={<StudentDashboard />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="profile/:id" element={<Profile />} />
         <Route path="schedule" element={<Schedule />} />
         <Route path="notifications" element={<Notifications />} />
+        <Route path="attendance" element={<Attendance />} />
       </Route>
     </Routes>
   );
