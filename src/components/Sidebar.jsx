@@ -151,7 +151,6 @@ function Sidebar() {
               }}
             >
               <span
-                hover:text-red-600
                 className="text-2xl"
                 style={{
                   color: active ? "var(--color-primary)" : "var(--text-muted)",

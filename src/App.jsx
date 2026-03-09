@@ -14,8 +14,20 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Notfound from "./routes/Notfound";
 import StudentDashboard from "./pages/StudentDashboard";
 import Attendance from "./pages/Attendance";
+import { useEffect } from "react";
+  
+import { useSelector, useDispatch } from "react-redux";
+import { fetchLessons } from "./features/lessons/lessonsSlice";
 
 function App() {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch((fetchLessons()))
+    }
+  },[]);
   return (
     <Routes>
       <Route path="/" element={<Login />} />
