@@ -87,26 +87,56 @@ export default function Login() {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black-950 px-4">
-      <div className="w-full max-w-md bg-[var(--bg-card)] rounded-2xl shadow-xl px-8 py-20 sm:p-20">
-        <h1 className="text-4xl text-[var(--text-main)] font-bold mb-8 text-center">
+    <div
+      className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden"
+      style={{ background: "var(--bg-main)" }}
+    >
+      {/* Background blobs */}
+      <div
+        className="absolute w-[500px] h-[500px] blur-[140px] rounded-full top-[-100px] left-[-100px] animate-pulse"
+        style={{ background: "var(--color-primary-soft)" }}
+      ></div>
+
+      <div
+        className="absolute w-[400px] h-[400px] blur-[120px] rounded-full bottom-[-120px] right-[-120px] animate-pulse"
+        style={{ background: "var(--color-secondary-soft)" }}
+      ></div>
+
+      <div
+        className="relative w-full max-w-md backdrop-blur-xl border rounded-3xl shadow-lg px-10 py-16"
+        style={{
+          background: "var(--bg-surface)",
+          borderColor: "var(--border-color)",
+          boxShadow: "var(--shadow-lg)",
+        }}
+      >
+        <h1
+          className="text-4xl font-bold mb-8 text-center"
+          style={{ color: "var(--text-main)" }}
+        >
           Welcome Back
         </h1>
 
         {error && (
           <div
             role="alert"
-            className="bg-red-700 text-white text-sm p-3 rounded mb-5 text-center"
+            className="text-sm p-3 rounded mb-5 text-center"
+            style={{
+              background: "var(--color-danger-soft)",
+              color: "var(--color-danger)",
+            }}
           >
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+          {/* EMAIL */}
           <div>
             <label
               htmlFor="email"
-              className="block text-[var(--text-main)] mb-2 font-medium"
+              className="block mb-2 font-medium"
+              style={{ color: "var(--text-main)" }}
             >
               Email
             </label>
@@ -120,14 +150,21 @@ export default function Login() {
               value={mail}
               onChange={(e) => setMail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-[var(--bg-main)] text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-midnight-700 transition"
+              className="w-full px-4 py-3 rounded-lg transition focus:outline-none"
+              style={{
+                background: "var(--bg-main)",
+                color: "var(--text-main)",
+                border: "1px solid var(--border-color)",
+              }}
             />
           </div>
 
+          {/* PASSWORD */}
           <div>
             <label
               htmlFor="password"
-              className="block text-[var(--text-main)] mb-2 font-medium"
+              className="block mb-2 font-medium"
+              style={{ color: "var(--text-main)" }}
             >
               Password
             </label>
@@ -141,32 +178,47 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[var(--bg-main)] text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-midnight-700 transition pr-12"
+                className="w-full px-4 py-3 rounded-lg pr-12 transition focus:outline-none"
+                style={{
+                  background: "var(--bg-main)",
+                  color: "var(--text-main)",
+                  border: "1px solid var(--border-color)",
+                }}
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-3 text-[var(--text-main)] hover:text-paper-90 focus:outline-none"
+                className="absolute right-3 top-3 text-sm"
+                style={{ color: "var(--text-muted)" }}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>
 
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full text-red-50 py-3 mt-1 bg-[var(--color-primary)] hover:bg-midnight-800 font-semibold rounded-lg transition disabled:opacity-50"
+            className="w-full py-3 mt-1 font-semibold rounded-lg transition disabled:opacity-50"
+            style={{
+              background: "var(--color-primary)",
+              color: "var(--text-invert)",
+            }}
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <p className="text-paper-50 text-center mt-6 text-sm select-none">
+        <p
+          className="text-center mt-6 text-sm select-none"
+          style={{ color: "var(--text-muted)" }}
+        >
           © 2026 CactusCRM. All rights reserved.
         </p>
       </div>
     </div>
   );
 }
+

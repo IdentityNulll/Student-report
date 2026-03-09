@@ -19,7 +19,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="*" element={<Notfound />} />
 
       {/* TEACHER ROUTES */}
       <Route
@@ -52,6 +51,8 @@ function App() {
         <Route path="notifications" element={<Notifications />} />
         <Route path="attendance" element={<Attendance />} />
       </Route>
+
+      <Route path="*" element={<Notfound />} />
     </Routes>
   );
 }

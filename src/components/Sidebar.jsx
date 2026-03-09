@@ -82,7 +82,10 @@ function Sidebar() {
 
     {
       name: "Profile",
-      path: userRole === "STUDENT" ? `/student/profile/${userId}` : `/teacher/profile/${userId}` ,
+      path:
+        userRole === "STUDENT"
+          ? `/student/profile/${userId}`
+          : `/teacher/profile/${userId}`,
       icon: <IoMdPerson />,
     },
   ];
@@ -119,7 +122,8 @@ function Sidebar() {
         <button
           onClick={() => setCollapsed(!collapsed)}
           aria-label="Collapse"
-          className="hidden md:block text-slate-600 hover:text-slate-800 transition"
+          className="hidden md:block transition"
+          style={{ color: "var(--text-muted)" }}
         >
           <TbLayoutSidebarFilled className="text-2xl" />
         </button>
@@ -136,17 +140,18 @@ function Sidebar() {
               aria-label={item.name}
               className={clsx(
                 "flex flex-col md:flex-row items-center gap-1 md:gap-4 px-4 py-3 rounded-lg transition",
-                active ? "font-semibold" : "hover:bg-slate-50",
+                active ? "font-semibold" : "hover:bg-[var(--bg-hover)]",
               )}
               style={{
                 color: active ? "var(--color-primary)" : "var(--text-muted)",
                 backgroundColor: active
-                  ? "rgba(37, 99, 235, 0.1)"
+                  ? "var(--color-primary-soft)"
                   : "transparent",
                 fontSize: "1rem",
               }}
             >
               <span
+                hover:text-red-600
                 className="text-2xl"
                 style={{
                   color: active ? "var(--color-primary)" : "var(--text-muted)",
@@ -175,7 +180,8 @@ function Sidebar() {
         style={{ borderColor: "var(--border-color)" }}
       >
         <button
-          className="flex items-center gap-4 w-full transition cursor-pointer text-slate-500 hover:text-red-600 text-base"
+          className="flex items-center gap-4 w-full transition cursor-pointer text-base hover:text-[var(--color-danger)]"
+          style={{ color: "var(--text-muted)" }}
           onClick={handleLogOut}
         >
           <IoMdLogOut className="text-2xl" />
