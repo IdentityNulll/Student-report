@@ -18,6 +18,7 @@ import { useEffect } from "react";
   
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLessons } from "./features/lessons/lessonsSlice";
+import { fetchAttendance } from "./features/attendance/attendanceSlice";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -25,7 +26,8 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      dispatch((fetchLessons()))
+      // dispatch((fetchLessons()))
+      dispatch(fetchAttendance())
     }
   },[]);
   return (
@@ -43,7 +45,7 @@ function App() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="analytics" element={<Analytics />} />
-        <Route path="schedule" element={<Schedule />} />
+        {/* <Route path="schedule" element={<Schedule />} /> */}
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile/:id" element={<Profile />} />
       </Route>
@@ -59,7 +61,7 @@ function App() {
       >
         <Route path="dashboard" element={<StudentDashboard />} />
         <Route path="profile/:id" element={<Profile />} />
-        <Route path="schedule" element={<Schedule />} />
+        {/* <Route path="schedule" element={<Schedule />} /> */}
         <Route path="notifications" element={<Notifications />} />
         <Route path="attendance" element={<Attendance />} />
       </Route>

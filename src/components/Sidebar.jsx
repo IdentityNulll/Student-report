@@ -55,11 +55,11 @@ function Sidebar() {
         ]
       : []),
 
-    {
-      name: "Schedule",
-      path: userRole === "STUDENT" ? "/student/schedule" : "/teacher/schedule",
-      icon: <IoMdCalendar />,
-    },
+    // {
+    //   name: "Schedule",
+    //   path: userRole === "STUDENT" ? "/student/schedule" : "/teacher/schedule",
+    //   icon: <IoMdCalendar />,
+    // },
 
     ...(userRole === "STUDENT"
       ? [
