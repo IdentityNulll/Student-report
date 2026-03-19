@@ -1,16 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
 
-const studentId = localStorage.getItem("id")
-
 export const fetchAttendance = createAsyncThunk(
   "attendance/fetchAttendance",
   async (_, { rejectWithValue }) => {
     try {
+      const studentId = localStorage.getItem("id");
+
+      if (!studentId) {
+        return rejectWithValue("Student ID not found in localStorage");
+      }
+
       const res = await api.get(`/attendance/by-userId/${studentId}`);
-      console.log(res)
+      console.log("attendance response:", res.data);
+
       return res.data.data || [];
     } catch (err) {
+      console.log("attendance error:", err.response || err);
       return rejectWithValue(
         err.response?.data?.message || "Failed to fetch attendance"
       );

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   IoMdHome,
   IoMdAnalytics,
-  IoMdCalendar,
-  IoMdPeople,
   IoMdPerson,
   IoMdLogOut,
   IoMdCheckboxOutline,
@@ -12,17 +10,17 @@ import {
 } from "react-icons/io";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  const userId = useSelector((state) => state.auth.user.id);
-  const userRole = useSelector((state) => state.auth.user.role);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.auth.user?.id);
+  const userRole = useSelector((state) => state.auth.user?.role);
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,12 +52,6 @@ function Sidebar() {
           },
         ]
       : []),
-
-    // {
-    //   name: "Schedule",
-    //   path: userRole === "STUDENT" ? "/student/schedule" : "/teacher/schedule",
-    //   icon: <IoMdCalendar />,
-    // },
 
     ...(userRole === "STUDENT"
       ? [
@@ -98,8 +90,8 @@ function Sidebar() {
   return (
     <aside
       className={clsx(
-        "h-screen flex flex-col border-r transition-all duration-300",
-        collapsed ? "w-20" : "w-72",
+        "fixed left-0 top-0 z-50 h-screen overflow-y-auto flex flex-col border-r transition-all duration-300",
+        collapsed ? "w-20" : "w-72"
       )}
       style={{
         backgroundColor: "var(--bg-card)",
@@ -107,7 +99,7 @@ function Sidebar() {
       }}
     >
       <div
-        className="flex items-center justify-between px-6 py-5 border-b"
+        className="flex items-center justify-between px-6 py-5 border-b shrink-0"
         style={{ borderColor: "var(--border-color)" }}
       >
         {!collapsed && (
@@ -129,7 +121,7 @@ function Sidebar() {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 py-6 space-y-2">
+      <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
         {menuItems.map((item) => {
           const active = location.pathname.startsWith(item.path);
 
@@ -140,7 +132,7 @@ function Sidebar() {
               aria-label={item.name}
               className={clsx(
                 "flex flex-col md:flex-row items-center gap-1 md:gap-4 px-4 py-3 rounded-lg transition",
-                active ? "font-semibold" : "hover:bg-[var(--bg-hover)]",
+                active ? "font-semibold" : "hover:bg-[var(--bg-hover)]"
               )}
               style={{
                 color: active ? "var(--color-primary)" : "var(--text-muted)",
@@ -164,7 +156,7 @@ function Sidebar() {
                   "whitespace-nowrap transition-all duration-300 text-[10px] md:text-base",
                   collapsed
                     ? "md:opacity-0 md:w-0 md:overflow-hidden"
-                    : "opacity-100 w-auto",
+                    : "opacity-100 w-auto"
                 )}
               >
                 {item.name}
@@ -175,7 +167,7 @@ function Sidebar() {
       </nav>
 
       <div
-        className="px-6 py-5 border-t"
+        className="px-6 py-5 border-t shrink-0"
         style={{ borderColor: "var(--border-color)" }}
       >
         <button

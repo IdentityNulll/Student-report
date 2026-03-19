@@ -1,10 +1,20 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAttendance } from "../features/attendance/attendanceSlice";
+import Loading from "../components/Loading";
 
 function Attendance() {
-  const { list: attendanceList, loading, error } = useSelector(
-    (state) => state.attendance
-  );
+  const dispatch = useDispatch();
+
+  const attendanceState = useSelector((state) => state.attendance) || {};
+  const { list, loading, error } = attendanceState;
+
+  // if backend returns one object instead of array, convert it into array
+  const attendanceList = Array.isArray(list) ? list : list ? [list] : [];
+
+  useEffect(() => {
+    dispatch(fetchAttendance());
+  }, [dispatch]);
 
   const formatReason = (reason) => {
     if (!reason) return "No reason";
@@ -36,13 +46,7 @@ function Attendance() {
 
   if (loading) {
     return (
-      <div className="p-4 sm:p-6">
-        <div className="bg-white border border-[var(--border-color)] rounded-2xl p-5 sm:p-6 shadow-sm">
-          <p className="text-slate-600 text-base sm:text-lg font-medium">
-            Loading attendance...
-          </p>
-        </div>
-      </div>
+      <Loading/>
     );
   }
 
@@ -60,203 +64,68 @@ function Attendance() {
 
   return (
     <div className="p-4 sm:p-6 min-h-screen bg-[var(--bg-main)]">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="mb-5 sm:mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-primary)]">
-            Attendance Records
+            My Attendance
           </h1>
           <p className="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-            View all submitted attendance reports here.
+            Here are all of your submitted attendance records.
           </p>
         </div>
 
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-sm overflow-hidden">
-          {attendanceList.length === 0 ? (
-            <div className="p-6 sm:p-8 text-center text-sm sm:text-base text-[var(--text-muted)]">
-              No attendance records found.
-            </div>
-          ) : (
-            <>
-              {/* Mobile cards */}
-              <div className="block lg:hidden p-4 space-y-4">
-                {attendanceList.map((item) => {
-                  const student = item.studentResponseDto;
+        {attendanceList.length === 0 ? (
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-sm p-6 sm:p-8 text-center text-sm sm:text-base text-[var(--text-muted)]">
+            No attendance records found.
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {attendanceList.map((item) => (
+              <div
+                key={item.attendanceId}
+                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-sm p-4 sm:p-5"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                  <div>
+                    <h2 className="text-base sm:text-lg font-semibold text-slate-800">
+                      {formatReason(item.reason)}
+                    </h2>
+                    <p className="text-sm text-slate-500 mt-1">
+                      Submitted: {formatDate(item.submittedAt)}
+                    </p>
+                  </div>
 
-                  return (
-                    <div
-                      key={item.attendanceId}
-                      className="border border-[var(--border-color)] rounded-xl p-4 bg-white shadow-sm"
-                    >
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-11 h-11 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center text-slate-600 font-semibold shrink-0">
-                          {student?.photoUrl ? (
-                            <img
-                              src={student.photoUrl}
-                              alt={`${student.firstName} ${student.lastName}`}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            `${student?.firstName?.[0] || ""}${
-                              student?.lastName?.[0] || ""
-                            }`
-                          )}
-                        </div>
+                  <span
+                    className={`inline-block w-fit px-3 py-1 rounded-full text-xs font-semibold ${getReasonTypeStyle(
+                      item.reasonType
+                    )}`}
+                  >
+                    {item.reasonType || "Unknown"}
+                  </span>
+                </div>
 
-                        <div className="min-w-0">
-                          <p className="font-semibold text-slate-800 text-sm sm:text-base break-words">
-                            {student?.firstName} {student?.lastName}
-                          </p>
-                          <p className="text-xs sm:text-sm text-slate-500">
-                            {student?.role || "Student"}
-                          </p>
-                        </div>
-                      </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-slate-500 text-xs mb-1">Reason</p>
+                    <p className="text-slate-700">{formatReason(item.reason)}</p>
+                  </div>
 
-                      <div className="space-y-3 text-sm">
-                        <div>
-                          <p className="text-slate-500 text-xs mb-1">Email</p>
-                          <p className="text-slate-700 break-all">
-                            {student?.email || "No email"}
-                          </p>
-                        </div>
+                  <div>
+                    <p className="text-slate-500 text-xs mb-1">Type</p>
+                    <p className="text-slate-700">{item.reasonType || "Unknown"}</p>
+                  </div>
 
-                        <div>
-                          <p className="text-slate-500 text-xs mb-1">Reason</p>
-                          <p className="text-slate-700">
-                            {formatReason(item.reason)}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-slate-500 text-xs mb-1">Type</p>
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getReasonTypeStyle(
-                              item.reasonType
-                            )}`}
-                          >
-                            {item.reasonType || "Unknown"}
-                          </span>
-                        </div>
-
-                        <div>
-                          <p className="text-slate-500 text-xs mb-1">Comment</p>
-                          <p className="text-slate-700 break-words">
-                            {item.comment || "No comment"}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-slate-500 text-xs mb-1">
-                            Submitted At
-                          </p>
-                          <p className="text-slate-700">
-                            {formatDate(item.submittedAt)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                  <div className="sm:col-span-2">
+                    <p className="text-slate-500 text-xs mb-1">Comment</p>
+                    <p className="text-slate-700 break-words">
+                      {item.comment || "No comment"}
+                    </p>
+                  </div>
+                </div>
               </div>
-
-              {/* Desktop table */}
-              <div className="hidden lg:block overflow-x-auto">
-                <table className="w-full min-w-[900px]">
-                  <thead className="bg-slate-50 border-b border-[var(--border-color)]">
-                    <tr>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Student
-                      </th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Email
-                      </th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Reason
-                      </th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Type
-                      </th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Comment
-                      </th>
-                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                        Submitted At
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {attendanceList.map((item) => {
-                      const student = item.studentResponseDto;
-
-                      return (
-                        <tr
-                          key={item.attendanceId}
-                          className="border-b border-[var(--border-color)] hover:bg-slate-50 transition"
-                        >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-11 h-11 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center text-slate-600 font-semibold">
-                                {student?.photoUrl ? (
-                                  <img
-                                    src={student.photoUrl}
-                                    alt={`${student.firstName} ${student.lastName}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  `${student?.firstName?.[0] || ""}${
-                                    student?.lastName?.[0] || ""
-                                  }`
-                                )}
-                              </div>
-
-                              <div>
-                                <p className="font-semibold text-slate-800">
-                                  {student?.firstName} {student?.lastName}
-                                </p>
-                                <p className="text-sm text-slate-500">
-                                  {student?.role}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td className="px-6 py-4 text-slate-700">
-                            {student?.email || "No email"}
-                          </td>
-
-                          <td className="px-6 py-4 text-slate-700">
-                            {formatReason(item.reason)}
-                          </td>
-
-                          <td className="px-6 py-4">
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-semibold ${getReasonTypeStyle(
-                                item.reasonType
-                              )}`}
-                            >
-                              {item.reasonType || "Unknown"}
-                            </span>
-                          </td>
-
-                          <td className="px-6 py-4 text-slate-700 max-w-[250px]">
-                            <p className="truncate" title={item.comment}>
-                              {item.comment || "No comment"}
-                            </p>
-                          </td>
-
-                          <td className="px-6 py-4 text-slate-700">
-                            {formatDate(item.submittedAt)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
