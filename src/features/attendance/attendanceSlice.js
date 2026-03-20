@@ -12,16 +12,14 @@ export const fetchAttendance = createAsyncThunk(
       }
 
       const res = await api.get(`/attendance/by-userId/${studentId}`);
-      console.log("attendance response:", res.data);
 
       return res.data.data || [];
     } catch (err) {
-      console.log("attendance error:", err.response || err);
       return rejectWithValue(
-        err.response?.data?.message || "Failed to fetch attendance"
+        err.response?.data?.message || "Failed to fetch attendance",
       );
     }
-  }
+  },
 );
 
 const attendanceSlice = createSlice({
